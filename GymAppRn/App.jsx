@@ -1,11 +1,13 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, StatusBar} from 'react-native';
 import React from 'react';
-
+import {NavigationContainer} from '@react-navigation/native';
+import StackScrens from './src/Navigation/StackNavigation/StackScrens';
+import 'react-native-gesture-handler';
 const App = () => {
   return (
-    <View>
-      <Text>App</Text>
-    </View>
+    <NavigationContainer>
+      <StackScrens />
+    </NavigationContainer>
   );
 };
 
