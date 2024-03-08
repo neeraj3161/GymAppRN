@@ -1,11 +1,18 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Colors from '../../utils/Colors';
 
 const TopNavBar = props => {
   return (
     <View style={styles.topNavStyle}>
-      <Text style={styles.navBarTxt}>{props.tabHeading}</Text>
+      <View style={styles.secondarContainer}>
+        <Text style={styles.navBarTxt}>{props.tabHeading}</Text>
+        {props.imageSource && (
+          <TouchableOpacity>
+            <Image source={props.imageSource} tintColor={Colors.white} />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -23,5 +30,10 @@ const styles = StyleSheet.create({
   navBarTxt: {
     color: Colors.white,
     fontSize: 20,
+  },
+
+  secondarContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
   },
 });

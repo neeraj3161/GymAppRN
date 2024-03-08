@@ -87,7 +87,7 @@ const BottomMain = () => {
             <View
               style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
               <Image
-                source={require('../../assets/icons/settings.png')}
+                source={require('../../assets/icons/report.png')}
                 resizeMode="contain"
                 style={{
                   width: 25,

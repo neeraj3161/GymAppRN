@@ -1,11 +1,23 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Button} from 'react-native';
 import React from 'react';
 import TopNavBar from '../SharedComponents/TopNavBar';
+import CardView from '../../utils/CommonComponents/CardView';
+import HomeDash from '../Dashboards/HomeDash';
 
 const Home = () => {
   return (
     <View>
-      <TopNavBar tabHeading="Home" />
+      <TopNavBar
+        imageSource={require('../../assets/icons/off.png')}
+        tabHeading="Home"
+      />
+
+      <ScrollView
+      // horizontal={true}
+      // showsHorizontalScrollIndicator={false}
+      >
+        <HomeDash />
+      </ScrollView>
     </View>
   );
 };
