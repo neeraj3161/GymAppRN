@@ -12,6 +12,7 @@ const Colors = {
   light_blue: '#73e6ff',
   primary_light: '#979FED',
   NavGrey: '#748c94',
+  primaryDark: '#212640'
 };
 
 export default Colors;

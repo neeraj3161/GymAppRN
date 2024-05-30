@@ -6,6 +6,10 @@ const CommonStyles = {
 
     paddingVertical: 20,
   },
+
+  actionButton: {
+
+  }
 };
 
 export default CommonStyles;

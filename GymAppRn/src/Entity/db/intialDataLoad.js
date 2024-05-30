@@ -136,12 +136,12 @@ const dropTable = function (tableName) {
       sql,
       [],
       (tx,
-      result => {
-        console.log(result);
-      },
-      error => {
-        console.log(error);
-      }),
+        result => {
+          console.log(result);
+        },
+        error => {
+          console.log(error);
+        }),
     );
   });
 };
@@ -166,6 +166,17 @@ const getAsyncData = async function (key) {
   }
 };
 
+const useLoggedIn = async function (key) {
+  try {
+    let value = await AsyncStorage.getItem(key);
+    // console.log('async value for: ' + key + ' value: ' + value);
+    return true;
+  } catch (error) {
+    console.log('Error occured getAsyncData: ' + error);
+    return false;
+  }
+};
+
 export {
   db,
   createUserTable,
@@ -176,4 +187,5 @@ export {
   dropTable,
   addAsyncData,
   getAsyncData,
+  useLoggedIn
 };
