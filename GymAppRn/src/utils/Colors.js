@@ -4,7 +4,7 @@ const Colors = {
   ShadowGrey: '#777',
   red: 'tomato',
   mediumGreen: '#27AE60',
-  white: 'white',
+  white: '#DFDFDF',
   black: '#000',
   danger: '#C70039',
   dark_navy: '#213555',
@@ -12,7 +12,9 @@ const Colors = {
   light_blue: '#73e6ff',
   primary_light: '#979FED',
   NavGrey: '#748c94',
-  primaryDark: '#212640'
+  primaryDark: '#212640',
+  inputColorWhite: '#D9D9D9',
+  buttonColorPrimary: '#4942CD'
 };
 
 export default Colors;

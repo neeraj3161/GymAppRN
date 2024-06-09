@@ -1,11 +1,12 @@
-import {View, Text, Image} from 'react-native';
+import { View, Text, Image } from 'react-native';
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../Screens/Main/Home';
 import Settings from '../../Screens/Main/Settings';
 import Reports from '../../Screens/Main/Reports';
 import Members from '../../Screens/Main/Members';
 import Colors from '../../utils/Colors';
+import MainDash from '../../Screens/Dashboards/MainDash';
 
 const BottomMain = () => {
   const Tab = createBottomTabNavigator();
@@ -27,11 +28,11 @@ const BottomMain = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={MainDash}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
-              style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
+              style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
               <Image
                 source={require('../../assets/icons/home.png')}
                 resizeMode="contain"
@@ -56,9 +57,9 @@ const BottomMain = () => {
         name="Members"
         component={Members}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
-              style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
+              style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
               <Image
                 source={require('../../assets/icons/members.png')}
                 resizeMode="contain"
@@ -83,9 +84,9 @@ const BottomMain = () => {
         name="Reports"
         component={Reports}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
-              style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
+              style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
               <Image
                 source={require('../../assets/icons/report.png')}
                 resizeMode="contain"
@@ -110,9 +111,9 @@ const BottomMain = () => {
         name="Settings"
         component={Settings}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
-              style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
+              style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
               <Image
                 source={require('../../assets/icons/settings.png')}
                 resizeMode="contain"
