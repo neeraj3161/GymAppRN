@@ -52,17 +52,28 @@ const MainDash = () => {
 
                         <CardViewWithImage cardName={'Plan Dues'} width={180} height={120} number={25} colorTxt={Colors.danger} />
                         <CardViewWithImage cardName={'Plan Dues Today'} width={180} height={120} number={25} colorTxt={Colors.buttonColorPrimary} />
-                        <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/members.png')} />
-                        <CardViewWithImage cardName={'Active'} width={180} height={120} imgSource={require('../../assets/icons/active.png')} />
-                        <CardViewWithImage cardName={'Inactive'} width={180} height={120} imgSource={require('../../assets/icons/inactive.png')} />
+
                         {/* <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/searchIcon.png')} />
                     <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/searchIcon.png')} />
                     <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/searchIcon.png')} />
                     <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/searchIcon.png')} /> */}
 
                     </ScrollView>
-                    <CardViewWithImage cardName={'Birthday'} width={'100'} height={120} imgSource={require('../../assets/icons/cake.png')} />
+                    <View style={styles.smallCards}>
+                        <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/members.png')} />
+                        <CardViewWithImage cardName={'Active'} width={180} height={120} imgSource={require('../../assets/icons/active.png')} />
+
+                    </View>
+
+                    <View style={styles.smallCards}>
+
+                        <CardViewWithImage cardName={'Inactive'} width={180} height={120} imgSource={require('../../assets/icons/inactive.png')} />
+                        <CardViewWithImage cardName={'Receive pay'} width={180} height={120} imgSource={require('../../assets/icons/inactive.png')} />
+                    </View>
+
                     <CardViewWithImage cardName={'Amount dues'} width={'100'} height={120} number={3} colorTxt={Colors.danger} />
+                    <CardViewWithImage cardName={'Birthday'} width={'100'} height={120} imgSource={require('../../assets/icons/cake.png')} />
+
                     {/* To cover bottom nav bar height */}
                     <View style={{ height: 300 }}></View>
 
@@ -78,6 +89,10 @@ const MainDash = () => {
 export default MainDash
 
 const styles = StyleSheet.create({
+
+    smallCards: {
+        flexDirection: 'row'
+    },
 
     addBtn: {
         backgroundColor: Colors.buttonColorPrimary,

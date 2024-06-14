@@ -44,7 +44,10 @@ const MemberDetailsPage = () => {
                     </View>
 
                 </View>
-                {/* <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>View Plan Details</Text></TouchableOpacity> */}
+                <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>Edit member info</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>Current plan details</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>View plan history</Text></TouchableOpacity>
+
                 {/* To cover bottom nav bar height */}
                 <View style={{ height: 100 }}></View>
             </ScrollView>
@@ -60,7 +63,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        marginHorizontal: 20
+        marginHorizontal: 20,
+        marginBottom: 10
     },
     status: {
         backgroundColor: Colors.mediumGreen,
