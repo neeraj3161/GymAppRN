@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Colors from '../../utils/Colors';
 
@@ -21,7 +21,7 @@ export default TopNavBar;
 
 const styles = StyleSheet.create({
   topNavStyle: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryBackground,
     height: 60,
     justifyContent: 'center',
     paddingHorizontal: 20,

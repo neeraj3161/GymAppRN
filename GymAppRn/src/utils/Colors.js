@@ -14,7 +14,8 @@ const Colors = {
   NavGrey: '#748c94',
   primaryDark: '#212640',
   inputColorWhite: '#D9D9D9',
-  buttonColorPrimary: '#4942CD'
+  buttonColorPrimary: '#4942CD',
+  primaryBackground: '#212640'
 };
 
 export default Colors;

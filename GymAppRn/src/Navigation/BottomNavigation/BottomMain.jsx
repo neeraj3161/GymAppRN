@@ -15,6 +15,7 @@ const BottomMain = () => {
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,
+        tabBarHideOnKeyboard: true,
 
         tabBarStyle: {
           position: 'absolute',
@@ -22,8 +23,10 @@ const BottomMain = () => {
           backgroundColor: '#ffffff',
           borderTopEndRadius: 15,
           borderTopLeftRadius: 15,
-          height: 90,
+          height: 70,
           zIndex: 0,
+          justifyContent: 'center',
+          alignItems: 'center'
         },
       }}>
       <Tab.Screen
@@ -37,15 +40,15 @@ const BottomMain = () => {
                 source={require('../../assets/icons/home.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
-                  tintColor: focused ? Colors.primary : Colors.NavGrey,
+                  width: 20,
+                  height: 20,
+                  tintColor: focused ? Colors.buttonColorPrimary : Colors.NavGrey,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? Colors.primary : Colors.NavGrey,
-                  fontSize: 12,
+                  color: focused ? Colors.buttonColorPrimary : Colors.NavGrey,
+                  fontSize: 10,
                 }}>
                 Home
               </Text>
@@ -64,15 +67,15 @@ const BottomMain = () => {
                 source={require('../../assets/icons/members.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
-                  tintColor: focused ? Colors.primary : Colors.NavGrey,
+                  width: 20,
+                  height: 20,
+                  tintColor: focused ? Colors.buttonColorPrimary : Colors.NavGrey,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? Colors.primary : Colors.NavGrey,
-                  fontSize: 12,
+                  color: focused ? Colors.buttonColorPrimary : Colors.NavGrey,
+                  fontSize: 10,
                 }}>
                 Members
               </Text>
@@ -91,15 +94,15 @@ const BottomMain = () => {
                 source={require('../../assets/icons/report.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
-                  tintColor: focused ? Colors.primary : Colors.NavGrey,
+                  width: 20,
+                  height: 20,
+                  tintColor: focused ? Colors.buttonColorPrimary : Colors.NavGrey,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? Colors.primary : Colors.NavGrey,
-                  fontSize: 12,
+                  color: focused ? Colors.buttonColorPrimary : Colors.NavGrey,
+                  fontSize: 10,
                 }}>
                 Reports
               </Text>
@@ -118,15 +121,15 @@ const BottomMain = () => {
                 source={require('../../assets/icons/settings.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
-                  tintColor: focused ? Colors.primary : Colors.NavGrey,
+                  width: 20,
+                  height: 20,
+                  tintColor: focused ? Colors.buttonColorPrimary : Colors.NavGrey,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? Colors.primary : Colors.NavGrey,
-                  fontSize: 12,
+                  color: focused ? Colors.buttonColorPrimary : Colors.NavGrey,
+                  fontSize: 10,
                 }}>
                 Settings
               </Text>
