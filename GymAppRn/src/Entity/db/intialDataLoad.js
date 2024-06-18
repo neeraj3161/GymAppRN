@@ -32,7 +32,7 @@ const createUserTable = () => {
 
 const createGymMembersTable = () => {
   db.executeSql(
-    'CREATE TABLE IF NOT EXISTS members (member_id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255) NOT NULL, surname VARCHAR(255), age INTEGER NOT NULL, date_of_birth DATE NOT NULL, phone_number VARCHAR(20) UNIQUE NOT NULL, medical_history VARCHAR(500), registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    'CREATE TABLE IF NOT EXISTS members (member_id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255) NOT NULL, surname VARCHAR(255), age INTEGER NOT NULL, date_of_birth DATE NOT NULL, phone_number VARCHAR(20) UNIQUE NOT NULL, medical_history VARCHAR(500), is_active bool default true,  registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
     [],
     result => {
       console.log('members table created successfully');
@@ -42,6 +42,20 @@ const createGymMembersTable = () => {
     },
   );
 };
+
+const insertGymMember = (props) => {
+  let sql = 'INSERT INTO members (email, name, surname, age, date_of_birth, phone_number, medical_history) VALUES (?,?,?,?,?,?,?)';
+  let params = [props.email, props.name, props.surname, props.age, props.dob, props.phno, props.medical_history];
+
+  db.executeSql(sql, params,
+    result => {
+      console.log(`member ${props.name} data inserted successfully!!`);
+    },
+    error => {
+      console.log(`Error occured ${error}`);
+    }
+  )
+}
 
 const createUser = () => {
   let sql =
@@ -171,6 +185,7 @@ const useLoggedIn = async function (key) {
     let value = await AsyncStorage.getItem(key);
     // console.log('async value for: ' + key + ' value: ' + value);
     return true;
+
   } catch (error) {
     console.log('Error occured getAsyncData: ' + error);
     return false;
@@ -187,5 +202,6 @@ export {
   dropTable,
   addAsyncData,
   getAsyncData,
-  useLoggedIn
+  useLoggedIn,
+  insertGymMember
 };

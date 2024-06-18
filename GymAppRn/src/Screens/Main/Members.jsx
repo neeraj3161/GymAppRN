@@ -6,7 +6,7 @@ import AllMembersPage from '../Members/AllMembersPage';
 const Members = () => {
   return (
     <View>
-      <TopNavBar tabHeading="Members" />
+      <TopNavBar tabHeading="All Members" />
       <AllMembersPage />
     </View>
   );

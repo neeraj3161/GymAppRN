@@ -2,8 +2,10 @@ import { Image, StyleSheet, Switch, Text, View, ScrollView, TouchableOpacity } f
 import React from 'react'
 import TopNavBar from '../SharedComponents/TopNavBar'
 import Colors from '../../utils/Colors'
+import { useNavigation } from '@react-navigation/native'
 
 const MemberDetailsPage = () => {
+    const navigation = useNavigation();
     return (
         <View style={styles.mainContainer}>
             <TopNavBar tabHeading={"Members Info"} />
@@ -46,7 +48,7 @@ const MemberDetailsPage = () => {
                 </View>
                 <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>Edit member info</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>Current plan details</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>View plan history</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => { navigation.navigate("ViewPlanHistory") }} style={styles.viewPlanBtn}><Text style={styles.labelTxt}>View plan history</Text></TouchableOpacity>
 
                 {/* To cover bottom nav bar height */}
                 <View style={{ height: 100 }}></View>

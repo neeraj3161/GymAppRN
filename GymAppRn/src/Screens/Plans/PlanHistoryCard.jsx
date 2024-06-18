@@ -1,27 +1,30 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, } from 'react-native'
 import React from 'react'
 import Colors from '../../utils/Colors'
 
-const MembersListCard = (props) => {
+const PlanHistoryCard = (props) => {
     return (
         <View style={styles.mainContainer}>
             <TouchableOpacity style={styles.cardContent}>
                 <View style={styles.content}>
-                    <Text style={styles.headTxt}>Mem Id</Text>
-
-                    <Text>{props.memberId}</Text>
+                    <Text style={styles.headTxt}>Txn Id</Text>
+                    <Text>{props.txnId}</Text>
                 </View>
                 <View style={styles.content}>
-                    <Text style={styles.headTxt}>Name</Text>
-
-                    <Text>{props.name}</Text>
-
+                    <Text style={styles.headTxt}>Plan</Text>
+                    <Text>{props.plan}</Text>
                 </View>
                 <View style={styles.content}>
-                    <Text style={styles.headTxt}>Status</Text>
-
-                    <View style={styles.status}></View>
-
+                    <Text style={styles.headTxt}>Amnt</Text>
+                    <Text>{props.amount}</Text>
+                </View>
+                <View style={styles.content}>
+                    <Text style={styles.headTxt}>Pending</Text>
+                    <Text style={props.amount > 0 ? ({ color: Colors.red }) : Colors.white}>{props.pending}</Text>
+                </View>
+                <View style={styles.content}>
+                    <Text style={styles.headTxt}>Date</Text>
+                    <Text>{props.date}</Text>
                 </View>
                 <Image source={require('../../assets/icons/right_arrow.png')} height={25} width={25} />
             </TouchableOpacity>
@@ -29,7 +32,7 @@ const MembersListCard = (props) => {
     )
 }
 
-export default MembersListCard
+export default PlanHistoryCard
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -45,25 +48,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
-        paddingLeft: 20,
-        paddingRight: 20,
+        padding: 20,
         alignItems: 'center'
     },
 
-    status: {
-        backgroundColor: Colors.mediumGreen,
-        height: 15,
-        width: 15,
-        borderRadius: 100
+    content: {
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
 
     headTxt: {
         fontWeight: 'bold',
         marginBottom: 5
-    },
-
-
-    content: {
-        justifyContent: 'space-between',
-    },
+    }
 })
