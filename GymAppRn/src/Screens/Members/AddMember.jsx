@@ -1,9 +1,14 @@
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { React, useState } from 'react'
 import TopNavBar from '../SharedComponents/TopNavBar'
 import Colors from '../../utils/Colors'
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 const AddMember = () => {
+    const [isValid, setDataValidation] = useState(false);
+    const [selected, setSelected] = useState('');
+    const [showCalendar, setShowCalendar] = useState(false);
+
     return (
         <View style={styles.mainContainer}>
             <TopNavBar tabHeading={'Add new member'} />
@@ -26,10 +31,31 @@ const AddMember = () => {
                             style={styles.input}
                             keyboardType="phone-pad"
                         />
+                        <TouchableOpacity onPress={() => {
+                            if (!showCalendar) {
+
+                                setShowCalendar(true);
+
+                            } else {
+                                setShowCalendar(false);
+                            }
+                        }} style={styles.dob}><Text>{selected.length > 0 ? `DOB: ${selected}` : 'Select DOB'}</Text></TouchableOpacity>
 
 
 
-                        <TouchableOpacity style={styles.dob}><Text>Select DOB</Text></TouchableOpacity>
+                        <View>
+                            {showCalendar && <Calendar
+                                onDayPress={day => {
+                                    setSelected(day.dateString);
+                                    console.log(day.dateString);
+                                    setShowCalendar(false);
+                                }}
+                                markedDates={{
+                                    [selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
+                                }}
+                            />}
+                        </View>
+
 
                         <Text style={styles.inputHeading}>Email</Text>
                         <TextInput
@@ -45,11 +71,16 @@ const AddMember = () => {
 
                         <Text style={styles.inputHeading}>Medical record summary</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, styles.medicalRecordInput]}
                             keyboardType="ascii-capable"
                         />
 
-                        <TouchableOpacity style={styles.submitBtn}><Text style={styles.submitBtnTxt}>Submit</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            if (!isValid) {
+                                Alert.alert('Inavlid data', 'Please correct the form data and try again!!', [{ text: 'ok', onPress: () => { } }]);
+                            }
+
+                        }} style={styles.submitBtn}><Text style={styles.submitBtnTxt}>Submit</Text></TouchableOpacity>
                     </View>
                 </View>
                 {/* To cover bottom nav bar height */}
@@ -72,6 +103,10 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         paddingLeft: 10,
         backgroundColor: Colors.inputColorWhite
+    },
+
+    medicalRecordInput: {
+        height: 100
     },
 
     content: {

@@ -1,11 +1,13 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Colors from '../../utils/Colors'
+import { useNavigation } from '@react-navigation/native'
 
 const MembersListCard = (props) => {
+    const navigation = useNavigation();
     return (
         <View style={styles.mainContainer}>
-            <TouchableOpacity style={styles.cardContent}>
+            <TouchableOpacity onPress={() => { navigation.navigate('MemberDetails') }} style={styles.cardContent}>
                 <View style={styles.content}>
                     <Text style={styles.headTxt}>Mem Id</Text>
 
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadius: 10,
         height: 80,
-        marginVertical: 10
+        marginVertical: 10,
     },
     cardContent: {
         flexDirection: 'row',
