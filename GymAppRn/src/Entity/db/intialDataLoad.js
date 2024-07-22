@@ -1,11 +1,9 @@
 import SQLite from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFS from 'react-native-fs';
 
 const db = SQLite.openDatabase(
-  {
-    name: 'ez_local.db',
-    createFromLocation: '~ez_local.db',
-  },
+  { name: "ez_local.db", location: 'default' },
   () => {
     // Success callback
     console.log('Database opened successfully');
@@ -17,9 +15,37 @@ const db = SQLite.openDatabase(
   },
 );
 
-const createUserTable = () => {
+//console.log(db);
+
+console.log(`Document directory path: ${RNFS.DocumentDirectoryPath}`);
+
+
+
+const checkIfDBExists = async () => {
+  const dbExists = await RNFS.exists('/data/user/0/com.gymapprn/databases/ez_local.db');
+  console.log(dbExists);
+  console.log("copying db");
+  await RNFS.copyFile('/data/user/0/com.gymapprn/databases/ez_local.db', RNFS.DownloadDirectoryPath + "/ez_backup.db");
+}
+
+checkIfDBExists();
+// const createUserTable = () => {r
+//   db.executeSql(
+//     'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255), password VARCHAR(255) NOT NULL, phone_number VARCHAR(13) UNIQUE NOT NULL, gym_name VARCHAR(50) NOT NULL, registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+//     [],
+//     result => {
+//       console.log('Table created successfully');
+//     },
+//     error => {
+//       console.log('Create table error', error);
+//     },
+//   );
+// };
+
+
+const createPlansTable = () => {
   db.executeSql(
-    'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255), password VARCHAR(255) NOT NULL, phone_number VARCHAR(13) UNIQUE NOT NULL, gym_name VARCHAR(50) NOT NULL, registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    'CREATE TABLE IF NOT EXISTS plans (plan_id INTEGER PRIMARY KEY AUTOINCREMENT, plan_type VARCHAR(50) UNIQUE NOT NULL, plan_amount INTEGER NOT NULL, created DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
     [],
     result => {
       console.log('Table created successfully');
@@ -30,18 +56,58 @@ const createUserTable = () => {
   );
 };
 
-const createGymMembersTable = () => {
+
+const CreateMembersToPlan = () => {
   db.executeSql(
-    'CREATE TABLE IF NOT EXISTS members (member_id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255) NOT NULL, surname VARCHAR(255), age INTEGER NOT NULL, date_of_birth DATE NOT NULL, phone_number VARCHAR(20) UNIQUE NOT NULL, medical_history VARCHAR(500), is_active bool default true,  registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    'CREATE TABLE IF NOT EXISTS members_to_plan (member_id INTEGER NOT NULL,plan_id INTEGER NOT NULL, start_date DATETIME, end_date DATETIME, created DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0, PRIMARY KEY (member_id, plan_id))',
     [],
     result => {
-      console.log('members table created successfully');
+      console.log('Table created successfully');
     },
     error => {
-      console.log('Create members table error', error);
+      console.log('Create table error', error);
     },
   );
 };
+
+const CreateMemberTransactionTable = () => {
+  db.executeSql(
+    'CREATE TABLE IF NOT EXISTS transactions (transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, member_id INTEGER NOT NULL REFERENCES members(member_id), plan_id REFERENCES plans(plan_id), amount INTEGER NOT NULL, created DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    [],
+    result => {
+      console.log('Table created successfully');
+    },
+    error => {
+      console.log('Create table error', error);
+    },
+  );
+};
+
+const CreatePlanDuesTable = () => {
+  db.executeSql(
+    'CREATE TABLE IF NOT EXISTS plan_dues (plan_due_id INTEGER PRIMARY KEY AUTOINCREMENT , member_id INTEGER NOT NULL REFERENCES members(member_id), plan_id REFERENCES plans(plan_id), amount INTEGER NOT NULL, created DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    [],
+    result => {
+      console.log('Table created successfully');
+    },
+    error => {
+      console.log('Create table error', error);
+    },
+  );
+}
+
+// const createGymMembersTable = () => {
+//   db.executeSql(
+//     'CREATE TABLE IF NOT EXISTS members (member_id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255) NOT NULL, surname VARCHAR(255), age INTEGER NOT NULL, date_of_birth DATE NOT NULL, phone_number VARCHAR(20) UNIQUE NOT NULL, medical_history VARCHAR(500), is_active bool default true,  registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+//     [],
+//     result => {
+//       console.log('members table created successfully');
+//     },
+//     error => {
+//       console.log('Create members table error', error);
+//     },
+//   );
+// };
 
 const insertGymMember = (props) => {
   let sql = 'INSERT INTO members (email, name, surname, age, date_of_birth, phone_number, medical_history) VALUES (?,?,?,?,?,?,?)';
@@ -57,10 +123,57 @@ const insertGymMember = (props) => {
   )
 }
 
+
+
+
+const createGymData = () => {
+  db.executeSql(
+    'CREATE TABLE IF NOT EXISTS gym (gym_id INTEGER PRIMARY KEY AUTOINCREMENT, gym_name VARCHAR(50) NOT NULL, address VARCHAR(500), phone_number VARCHAR(50) UNIQUE NOT NULL, registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    [],
+    result => {
+      console.log('Table created successfully');
+    },
+    error => {
+      console.log('Create table error', error);
+    },
+  );
+}
+
+const insertGymData = () => {
+  let sql =
+    'INSERT INTO gym (gym_name, address, phone_number) VALUES (?, ?, ?)';
+  let params = ['Sai Gym', 'ashok theatre pimpri pune 411017', '9270166110'];
+  db.executeSql(
+    sql,
+    params,
+    result => {
+      console.log('Success', 'gym data inserted successfully.');
+    },
+    error => {
+      console.log('gym data insert error', error);
+    },
+  );
+}
+
+const createUserTable = () => {
+  //should be gym id as ref key
+  db.executeSql(
+    'CREATE TABLE IF NOT EXISTS users (user_id INTEGER PRIMARY KEY AUTOINCREMENT,gym_id INTEGER REFERENCES gym(gym_id),  email VARCHAR(255) UNIQUE, name VARCHAR(255), password VARCHAR(255) NOT NULL, phone_number VARCHAR(13) UNIQUE NOT NULL,user_role INTEGER DEFAULT 0, registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    [],
+    result => {
+      console.log('Table created successfully');
+    },
+    error => {
+      console.log('Create table error', error);
+    },
+  );
+};
+
+
 const createUser = () => {
   let sql =
-    'INSERT INTO users (email, name, password, phone_number, GYM_NAME) VALUES (?, ?, ?, ?,?)';
-  let params = ['', 'Vikas', 'vikas@123456', '9270166110', 'Sai Gym'];
+    'INSERT INTO users (gym_id,email, name, password, phone_number) VALUES (?,?, ?, ?, ?)';
+  let params = [1, '', 'Vikas', 'vikas@123456', '9270166110'];
   db.executeSql(
     sql,
     params,
@@ -72,6 +185,20 @@ const createUser = () => {
     },
   );
 };
+
+const createGymMembersTable = () => {
+  db.executeSql(
+    'CREATE TABLE IF NOT EXISTS members (member_id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255) NOT NULL, surname VARCHAR(255), age INTEGER NOT NULL, date_of_birth DATE NOT NULL, phone_number VARCHAR(20) UNIQUE NOT NULL, medical_history VARCHAR(500), is_active bool default true,  registered_on DATETIME DEFAULT CURRENT_TIMESTAMP,added_by INTEGER REFERENCES users(user_id) NOT NULL, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    [],
+    result => {
+      console.log('members table created successfully');
+    },
+    error => {
+      console.log('Create members table error', error);
+    },
+  );
+};
+
 
 const listUsers = async () => {
   let sql = 'SELECT * FROM users';
@@ -203,5 +330,13 @@ export {
   addAsyncData,
   getAsyncData,
   useLoggedIn,
-  insertGymMember
+  insertGymMember,
+  createPlansTable,
+  CreateMembersToPlan,
+  CreateMemberTransactionTable,
+  CreatePlanDuesTable,
+  createGymMembersTable,
+  createGymData,
+  insertGymData
 };
+

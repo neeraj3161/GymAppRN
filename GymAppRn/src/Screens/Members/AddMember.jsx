@@ -2,57 +2,97 @@ import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Alert 
 import { React, useState } from 'react'
 import TopNavBar from '../SharedComponents/TopNavBar'
 import Colors from '../../utils/Colors'
-import { Calendar, LocaleConfig } from 'react-native-calendars';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
+
 
 const AddMember = () => {
-    const [isValid, setDataValidation] = useState(false);
     const [selected, setSelected] = useState('');
-    const [showCalendar, setShowCalendar] = useState(false);
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [dob, setDOB] = useState('');
+    const [age, setAge] = useState('');
+    const [medicalRecord, setMedicalRecord] = useState('');
+
+    const today = new Date();
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const validateUserInput = () => {
+        console.log(name, phone, dob, age);
+        if (name.length > 0 && phone.length >= 10 && dob.length > 0 && age.length > 0)
+            return true;
+        return false;
+    }
+
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date) => {
+        //console.warn("A date has been picked: ", date);
+        setSelected(date.toLocaleDateString());
+        setAge((parseInt(today.getFullYear() - date.getFullYear())).toString());
+        setDOB(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`)
+        hideDatePicker();
+    };
+
+
+
 
     return (
         <View style={styles.mainContainer}>
             <TopNavBar tabHeading={'Add new member'} />
 
             <ScrollView>
+
                 <View style={styles.content}>
                     <View style={styles.inputView}>
                         <Text style={styles.inputHeading}>Name</Text>
                         <TextInput
                             style={styles.input}
                             keyboardType="ascii-capable"
+                            value={name}
+                            onChangeText={text => { setName(text) }}
                         />
                         <Text style={styles.inputHeading}>Surname</Text>
                         <TextInput
                             style={styles.input}
                             keyboardType="ascii-capable"
+                            value={surname}
+                            onChangeText={text => { setSurname(text) }}
                         />
                         <Text style={styles.inputHeading}>Phone no</Text>
                         <TextInput
                             style={styles.input}
                             keyboardType="phone-pad"
+                            value={phone}
+                            onChangeText={text => { setPhone(text) }}
                         />
                         <TouchableOpacity onPress={() => {
-                            if (!showCalendar) {
+                            if (!isDatePickerVisible) {
 
-                                setShowCalendar(true);
+                                setDatePickerVisibility(true);
 
                             } else {
-                                setShowCalendar(false);
+                                setDatePickerVisibility(false);
                             }
                         }} style={styles.dob}><Text>{selected.length > 0 ? `DOB: ${selected}` : 'Select DOB'}</Text></TouchableOpacity>
 
 
 
                         <View>
-                            {showCalendar && <Calendar
-                                onDayPress={day => {
-                                    setSelected(day.dateString);
-                                    console.log(day.dateString);
-                                    setShowCalendar(false);
-                                }}
-                                markedDates={{
-                                    [selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
-                                }}
+                            {showDatePicker && <DateTimePickerModal
+                                isVisible={isDatePickerVisible}
+                                mode="date"
+                                onConfirm={handleConfirm}
+                                onCancel={hideDatePicker}
                             />}
                         </View>
 
@@ -61,22 +101,28 @@ const AddMember = () => {
                         <TextInput
                             style={styles.input}
                             keyboardType="email-address"
+                            value={email}
+                            onChangeText={text => { setEmail(text) }}
                         />
 
-                        <Text style={styles.inputHeading}>Age</Text>
+                        <Text style={styles.inputHeading}>Age (Years)</Text>
                         <TextInput
                             style={styles.input}
                             keyboardType="numeric"
+                            editable={false}
+                            value={age}
                         />
 
                         <Text style={styles.inputHeading}>Medical record summary</Text>
                         <TextInput
                             style={[styles.input, styles.medicalRecordInput]}
                             keyboardType="ascii-capable"
+                            value={medicalRecord}
+                            onChangeText={text => { setMedicalRecord(text) }}
                         />
 
                         <TouchableOpacity onPress={() => {
-                            if (!isValid) {
+                            if (!validateUserInput()) {
                                 Alert.alert('Inavlid data', 'Please correct the form data and try again!!', [{ text: 'ok', onPress: () => { } }]);
                             }
 

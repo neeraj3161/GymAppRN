@@ -17,24 +17,12 @@ const db = SQLite.openDatabase(
     },
 );
 
-const createUserTable = () => {
-    //should be gym id as ref key
-    db.executeSql(
-        'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255), password VARCHAR(255) NOT NULL, phone_number VARCHAR(13) UNIQUE NOT NULL, gym_name VARCHAR(50) NOT NULL, registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
-        [],
-        result => {
-            console.log('Table created successfully');
-        },
-        error => {
-            console.log('Create table error', error);
-        },
-    );
-};
+
 
 
 const AddNewMember = (props) => {
-    let sql = 'INSERT INTO members (email, name, surname, age, date_of_birth, phone_number, medical_history) VALUES (?,?,?,?,?,?,?)';
-    let params = [props.email, props.name, props.surname, props.age, props.dob, props.phno, props.medical_history];
+    let sql = 'INSERT INTO members (email, name, surname, age, date_of_birth, phone_number, medical_history, added_by) VALUES (?,?,?,?,?,?,?)';
+    let params = [props.email, props.name, props.surname, props.age, props.dob, props.phno, props.medical_history, props.user_id];
 
     db.executeSql(sql, params,
         result => {
@@ -49,5 +37,54 @@ const AddNewMember = (props) => {
 
 const LoadMemberInfo = (member_id) => {
 
-    let sql = 'SELECT name, surname, email, age, date_of_birth'
+    let sql = `SELECT name, surname, email, age, date_of_birth, added_by, registered_on, is_active FROM members WHERE member_id = ${member_id};`;
+    db.transaction(tx => {
+        tx.executeSql(
+            sql,
+            [],
+            (tx, resultSet) => {
+                var length = resultSet.rows.length;
+                for (var i = 0; i < length; i++) {
+                    console.log(resultSet.rows.item(i));
+                }
+            },
+            error => {
+                console.log('Loading single member error', error);
+            },
+        );
+    });
+};
+
+const LoadAllMembers = () => {
+    let sql = `SELECT name, surname, email, age, date_of_birth, added_by, registered_on, is_active FROM members;`;
+    db.transaction(tx => {
+        tx.executeSql(
+            sql,
+            [],
+            (tx, resultSet) => {
+                var length = resultSet.rows.length;
+                for (var i = 0; i < length; i++) {
+                    console.log(resultSet.rows.item(i));
+                }
+            },
+            error => {
+                console.log('Loading single member error', error);
+            },
+        );
+    });
 }
+
+const changeMemberState = (member_id, state) => {
+    let sql = `UPDATE members SET is_active = ${state} WHERE member_id = ${member_id};`;
+    db.executeSql(sql,
+        result => {
+            console.log(`member_id ${member_id} state updated to ${state}!!`);
+        },
+        error => {
+            console.log(`Error occured ${error}`);
+        }
+    )
+}
+
+
+
