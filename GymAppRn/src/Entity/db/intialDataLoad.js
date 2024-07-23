@@ -1,8 +1,8 @@
 import SQLite from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNFS from 'react-native-fs';
+//import RNFS from 'react-native-fs';
 
-const db = SQLite.openDatabase(
+const db = (db != null || db != undefined) ? db : SQLite.openDatabase(
   { name: "ez_local.db", location: 'default' },
   () => {
     // Success callback
@@ -17,18 +17,17 @@ const db = SQLite.openDatabase(
 
 //console.log(db);
 
-console.log(`Document directory path: ${RNFS.DocumentDirectoryPath}`);
 
 
 
 const checkIfDBExists = async () => {
-  const dbExists = await RNFS.exists('/data/user/0/com.gymapprn/databases/ez_local.db');
-  console.log(dbExists);
-  console.log("copying db");
-  await RNFS.copyFile('/data/user/0/com.gymapprn/databases/ez_local.db', RNFS.DownloadDirectoryPath + "/ez_backup.db");
+  // const dbExists = await RNFS.exists('/data/user/0/com.gymapprn/databases/ez_local.db');
+  // console.log(dbExists);
+  // console.log("copying db");
+  // await RNFS.copyFile('/data/user/0/com.gymapprn/databases/ez_local.db', RNFS.DownloadDirectoryPath + "/ez_backup.db");
 }
 
-checkIfDBExists();
+//checkIfDBExists();
 // const createUserTable = () => {r
 //   db.executeSql(
 //     'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255), password VARCHAR(255) NOT NULL, phone_number VARCHAR(13) UNIQUE NOT NULL, gym_name VARCHAR(50) NOT NULL, registered_on DATETIME DEFAULT CURRENT_TIMESTAMP, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
@@ -109,19 +108,6 @@ const CreatePlanDuesTable = () => {
 //   );
 // };
 
-const insertGymMember = (props) => {
-  let sql = 'INSERT INTO members (email, name, surname, age, date_of_birth, phone_number, medical_history) VALUES (?,?,?,?,?,?,?)';
-  let params = [props.email, props.name, props.surname, props.age, props.dob, props.phno, props.medical_history];
-
-  db.executeSql(sql, params,
-    result => {
-      console.log(`member ${props.name} data inserted successfully!!`);
-    },
-    error => {
-      console.log(`Error occured ${error}`);
-    }
-  )
-}
 
 
 
@@ -188,7 +174,7 @@ const createUser = () => {
 
 const createGymMembersTable = () => {
   db.executeSql(
-    'CREATE TABLE IF NOT EXISTS members (member_id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255) UNIQUE, name VARCHAR(255) NOT NULL, surname VARCHAR(255), age INTEGER NOT NULL, date_of_birth DATE NOT NULL, phone_number VARCHAR(20) UNIQUE NOT NULL, medical_history VARCHAR(500), is_active bool default true,  registered_on DATETIME DEFAULT CURRENT_TIMESTAMP,added_by INTEGER REFERENCES users(user_id) NOT NULL, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
+    'CREATE TABLE IF NOT EXISTS members (member_id INTEGER PRIMARY KEY AUTOINCREMENT, email VARCHAR(255), name VARCHAR(255) NOT NULL, surname VARCHAR(255), age INTEGER NOT NULL, date_of_birth DATE NOT NULL, phone_number VARCHAR(20) UNIQUE NOT NULL, medical_history VARCHAR(500), is_active bool default true,  registered_on DATETIME DEFAULT CURRENT_TIMESTAMP,added_by INTEGER REFERENCES users(user_id) NOT NULL, modified DATETIME DEFAULT CURRENT_TIMESTAMP, creator NOT NULL DEFAULT 0, modifier NOT NULL DEFAULT 0)',
     [],
     result => {
       console.log('members table created successfully');
@@ -199,9 +185,54 @@ const createGymMembersTable = () => {
   );
 };
 
+const insertGymMember = (props) => {
+  return new Promise((resolve, reject) => {
+    let sql = 'INSERT INTO members (email, name, surname, age, date_of_birth, phone_number, medical_history, added_by) VALUES (?,?,?,?,?,?,?,?)';
+    let params = [props.email, props.name, props.surname, props.age, props.dob, props.phno, props.medical_history, props.added_by];
 
-const listUsers = async () => {
-  let sql = 'SELECT * FROM users';
+    db.executeSql(sql, params,
+      result => {
+        console.log(`Member ${props.name} data inserted successfully!!`);
+        resolve(1);
+      },
+      error => {
+        console.log(`Error occurred ${JSON.stringify(error)}`);
+        if (error.message.includes("UNIQUE constraint")) {
+          console.warn('Constraint issue');
+          resolve(-1);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+// var member_data = new Object();
+// member_data.email = 'neerajtripathi7447@gmail.com';
+// member_data.name = 'Neeraj';
+// member_data.surname = 'Tripathi';
+// member_data.age = 26;
+// member_data.dob = '31-01-1998';
+// member_data.phno = '7447553161';
+// member_data.medical_history = '';
+// member_data.added_by = 1;
+
+
+// insertGymMember(member_data)
+//   .then(result => {
+//     if (result === -1) {
+//       console.log('Handle unique constraint error');
+//     } else {
+//       console.log('Insertion successful', result);
+//     }
+//   })
+//   .catch(error => {
+//     console.log('Error occurred', error);
+//   });
+
+const listTableData = async (tableName) => {
+  let sql = `SELECT * FROM ${tableName};`;
   db.transaction(tx => {
     tx.executeSql(
       sql,
@@ -323,7 +354,7 @@ export {
   db,
   createUserTable,
   createUser,
-  listUsers,
+  listTableData,
   verifyUserCredentials,
   deleteAllTableData,
   dropTable,

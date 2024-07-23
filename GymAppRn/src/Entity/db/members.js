@@ -1,7 +1,8 @@
 import SQLite from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { db as database } from './intialDataLoad';
 
-const db = SQLite.openDatabase(
+const db = database != null || database != undefined ? database : SQLite.openDatabase(
     {
         name: 'ez_local.db',
         createFromLocation: '~ez_local.db',
@@ -17,22 +18,30 @@ const db = SQLite.openDatabase(
     },
 );
 
+//getAsyncData('login_details');
 
+const insertGymMember = (props) => {
+    return new Promise((resolve, reject) => {
+        let sql = 'INSERT INTO members (email, name, surname, age, date_of_birth, phone_number, medical_history, added_by) VALUES (?,?,?,?,?,?,?,?)';
+        let params = [props.email, props.name, props.surname, props.age, props.dob, props.phno, props.medical_history, props.added_by];
 
-
-const AddNewMember = (props) => {
-    let sql = 'INSERT INTO members (email, name, surname, age, date_of_birth, phone_number, medical_history, added_by) VALUES (?,?,?,?,?,?,?)';
-    let params = [props.email, props.name, props.surname, props.age, props.dob, props.phno, props.medical_history, props.user_id];
-
-    db.executeSql(sql, params,
-        result => {
-            console.log(`member ${props.name} data inserted successfully!!`);
-        },
-        error => {
-            console.log(`Error occured ${error}`);
-        }
-    )
-}
+        db.executeSql(sql, params,
+            result => {
+                console.log(`Member ${props.name} data inserted successfully!!`);
+                resolve(1);
+            },
+            error => {
+                console.log(`Error occurred ${JSON.stringify(error)}`);
+                if (error.message.includes("UNIQUE constraint")) {
+                    console.warn('Constraint issue');
+                    resolve(-1);
+                } else {
+                    reject(error);
+                }
+            }
+        );
+    });
+};
 
 
 const LoadMemberInfo = (member_id) => {
@@ -86,5 +95,5 @@ const changeMemberState = (member_id, state) => {
     )
 }
 
-
+export { insertGymMember }
 

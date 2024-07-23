@@ -1,7 +1,7 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 
-const HomeCardView = ({cardName, number, borderLeftColor, width, height}) => {
+const HomeCardView = ({ cardName, number, borderLeftColor, width, height }) => {
   const importedStyles = {
     borderLeftColor,
     width,
@@ -36,5 +36,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  cardTxt: {fontSize: 20, fontWeight: '600', marginBottom: 15},
+  cardTxt: { fontSize: 20, fontWeight: '600', marginBottom: 15 },
 });

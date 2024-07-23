@@ -3,6 +3,7 @@ import { React, useState } from 'react'
 import TopNavBar from '../SharedComponents/TopNavBar'
 import Colors from '../../utils/Colors'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { insertGymMember } from '../../Entity/db/members';
 
 
 
@@ -18,6 +19,27 @@ const AddMember = () => {
 
     const today = new Date();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+
+    const resetInputAfterInsert = () => {
+        //TODO :: ADD more inputs
+        setEmail('');
+
+    }
+
+    const insertMember = () => {
+        var member_data = new Object();
+        member_data.email = email;
+        member_data.name = name.toLowerCase();
+        member_data.surname = surname.toLowerCase();
+        member_data.age = parseInt(age);
+        member_data.dob = dob;
+        member_data.phno = phone;
+        member_data.medical_history = medicalRecord;
+        member_data.added_by = 1;
+
+        return insertGymMember(member_data);
+    }
 
     const validateUserInput = () => {
         console.log(name, phone, dob, age);
@@ -37,9 +59,9 @@ const AddMember = () => {
 
     const handleConfirm = (date) => {
         //console.warn("A date has been picked: ", date);
-        setSelected(date.toLocaleDateString());
+        setSelected(`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`);
         setAge((parseInt(today.getFullYear() - date.getFullYear())).toString());
-        setDOB(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`)
+        setDOB(`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`)
         hideDatePicker();
     };
 
@@ -124,6 +146,17 @@ const AddMember = () => {
                         <TouchableOpacity onPress={() => {
                             if (!validateUserInput()) {
                                 Alert.alert('Inavlid data', 'Please correct the form data and try again!!', [{ text: 'ok', onPress: () => { } }]);
+                            } else {
+                                insertMember().then(result => {
+                                    if (result === -1) {
+                                        Alert.alert('Member Already Exists', 'Show member data', [{ text: 'ok', onPress: () => { } }]);
+                                    } else {
+                                        Alert.alert('Member Added Successfully', 'Show member data', [{ text: 'ok', onPress: () => { } }]);
+                                    }
+                                })
+                                    .catch(error => {
+                                        Alert.alert('Error occured', `Error occured while inserting member: ${error}`, [{ text: 'ok', onPress: () => { } }]);
+                                    });
                             }
 
                         }} style={styles.submitBtn}><Text style={styles.submitBtnTxt}>Submit</Text></TouchableOpacity>

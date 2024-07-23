@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Colors from '../Colors';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 const CardViewWithImage = ({ cardName, number, width, height, imgSource, colorTxt }) => {
   const importedStyles = {
@@ -10,14 +12,15 @@ const CardViewWithImage = ({ cardName, number, width, height, imgSource, colorTx
 
   return (
     <TouchableOpacity delayPressIn={1000}>
-      <View style={[importedStyles, styles.mainContainer]}>
+      <LinearGradient
+        colors={['#FFFDFA', '#FFFDFA']} style={[importedStyles, styles.mainContainer]}>
         {number && <Text style={[styles.cardTxt, { color: colorTxt }]}>{number}</Text>}
         {imgSource &&
           <Image source={imgSource} style={{ width: 25, height: 25, tintColor: Colors.buttonColorPrimary, marginBottom: 15 }} />
         }
-        <Text>{cardName}</Text>
+        <Text style={styles.cardInfo}>{cardName}</Text>
         {/* <Text style={styles.cardTxt}>{number}</Text> */}
-      </View>
+      </LinearGradient>
     </TouchableOpacity>
   );
 };
@@ -30,7 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-    backgroundColor: Colors.inputColorWhite,
+    backgroundColor: 'transparent',
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
     borderRadius: 10,
@@ -42,5 +45,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
 
-  cardTxt: { fontSize: 20, fontWeight: '600', marginBottom: 15 },
+  cardTxt: { fontSize: 23, fontWeight: '600', marginBottom: 15 },
+
+  cardInfo: { fontSize: 14, color: '#151515' }
 });

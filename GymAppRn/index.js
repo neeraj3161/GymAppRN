@@ -12,7 +12,7 @@ import {
   db,
   createUserTable,
   createUser,
-  listUsers,
+  listTableData,
   verifyUserCredentials,
   deleteAllTableData,
   dropTable,
@@ -49,13 +49,12 @@ console.log('App started');
 // console.log(dropTable('users'));
 //console.log(listUsers());
 //createUser();
-//listUsers();
+listTableData('members');
 //dropTable('members');
 // createGymData();
 // insertGymData();
 //createUserTable();
 //createGymMembersTable();
-listUsers();
 //createUser();
 //createPlansTable();
 //CreateMembersToPlan();
