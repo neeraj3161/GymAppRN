@@ -1,11 +1,38 @@
 import { Image, StyleSheet, Switch, Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import TopNavBar from '../SharedComponents/TopNavBar'
 import Colors from '../../utils/Colors'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { LoadMemberInfo } from '../../Entity/db/members'
 
 const MemberDetailsPage = () => {
     const navigation = useNavigation();
+    const route = useRoute();
+    //get the member_id passed through the navigation route :: AllMembersPage
+    const memberId = route.params;
+    const [member_id, setMemberId] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phno, setPhno] = useState('');
+    const [medical_history, setMedicalRecord] = useState('');
+    const [registration_date, setRegistrationDate] = useState('');
+    const [currentPlan, setCurrentPlan] = useState('');
+    const [dob, setDob] = useState('');
+    const [state, setState] = useState();
+
+    useEffect(() => {
+        LoadMemberInfo(memberId).then((result) => {
+            console.log(JSON.stringify(result));
+            setMemberId(memberId);
+            setName(result.name);
+            setPhno(result.phno);
+            setEmail(result.email);
+            setRegistrationDate(result.registered_on);
+            setState(result.is_active == 1 ? true : false);
+            setMedicalRecord(result.medical_history);
+            setDob(result.dob);
+        })
+    }, [])
     return (
         <View style={styles.mainContainer}>
             <TopNavBar tabHeading={"Members Info"} />
@@ -13,22 +40,22 @@ const MemberDetailsPage = () => {
                 <View style={styles.content}>
                     <View style={styles.basicDetailsCardView}>
                         <View style={styles.detailColumn}>
-                            <Text style={styles.labelTxt}>MemberId: 12345</Text>
+                            <Text style={styles.labelTxt}>MemberId: {member_id}</Text>
                             <View style={styles.status}></View>
                         </View>
                         <View style={styles.detailColumn}>
-                            <Text style={styles.labelTxt}>Name: Neeraj Tripathi</Text>
+                            <Text style={styles.labelTxt}>Name: {name}</Text>
 
                         </View>
 
-                        <Text style={styles.labelTxt}>Email: -</Text>
+                        <Text style={styles.labelTxt}>Email: {email}</Text>
 
-                        <Text style={styles.labelTxt}>Phone number: 7447553161</Text>
-                        <Text style={styles.labelTxt}>Medical record summary: -sJDDDDDDFHhhhhhhhhhhhhhhhhhhhhhhhhgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+                        <Text style={styles.labelTxt}>Phone number: {phno}</Text>
+                        <Text style={styles.labelTxt}>Medical record summary: {medical_history}
                         </Text>
-                        <Text style={styles.labelTxt}>Registration date: 02/02/2022</Text>
-                        <Text style={styles.labelTxt}>Current plan: Monthly</Text>
-                        <Text style={styles.labelTxt}>Date of birth: 01/01/1998</Text>
+                        <Text style={styles.labelTxt}>Registration date: {registration_date}</Text>
+                        <Text style={styles.labelTxt}>Current plan: {currentPlan}</Text>
+                        <Text style={styles.labelTxt}>Date of birth: {dob}</Text>
                         <View style={[styles.detailColumn, { marginVertical: 20 }]}>
                             <Image source={require('../../assets/icons/whatsapp.png')} style={{ width: 30, height: 30 }} />
                             <Image source={require('../../assets/icons/telephone-call.png')} style={{ width: 30, height: 30 }} />
@@ -40,6 +67,7 @@ const MemberDetailsPage = () => {
                             <Text style={styles.labelTxt}>Change Active/Inactive status: </Text>
                             <Switch trackColor={{ false: '#767577', true: '#81b0ff' }}
                                 thumbColor={true ? Colors.buttonColorPrimary : '#f4f3f4'}
+                                value={state}
                             >
                             </Switch>
                         </View>

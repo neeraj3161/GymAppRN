@@ -4,14 +4,14 @@ import Colors from '../Colors';
 import LinearGradient from 'react-native-linear-gradient';
 
 
-const CardViewWithImage = ({ cardName, number, width, height, imgSource, colorTxt }) => {
+const CardViewWithImage = ({ cardName, number, width, height, imgSource, colorTxt, onPress }) => {
   const importedStyles = {
     width,
     height,
   };
 
   return (
-    <TouchableOpacity delayPressIn={1000}>
+    <TouchableOpacity delayPressIn={1000} onPress={onPress}>
       <LinearGradient
         colors={['#FFFDFA', '#FFFDFA']} style={[importedStyles, styles.mainContainer]}>
         {number && <Text style={[styles.cardTxt, { color: colorTxt }]}>{number}</Text>}

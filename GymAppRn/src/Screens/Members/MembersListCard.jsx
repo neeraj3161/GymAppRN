@@ -7,7 +7,9 @@ const MembersListCard = (props) => {
     const navigation = useNavigation();
     return (
         <View style={styles.mainContainer}>
-            <TouchableOpacity onPress={() => { navigation.navigate('MemberDetails') }} style={styles.cardContent}>
+            <TouchableOpacity onPress={() => {
+                navigation.navigate('MemberDetails', props.memberId);
+            }} style={styles.cardContent}>
                 <View style={styles.content}>
                     <Text style={styles.headTxt}>Mem Id</Text>
 

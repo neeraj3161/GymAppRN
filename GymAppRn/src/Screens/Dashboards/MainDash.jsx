@@ -50,7 +50,9 @@ const MainDash = () => {
                 <ScrollView>
                     <ScrollView horizontal>
 
-                        <CardViewWithImage cardName={'Plan Dues'} width={180} height={120} number={25} colorTxt={Colors.danger} />
+                        <CardViewWithImage cardName={'Plan Dues'} width={180} height={120} number={25} colorTxt={Colors.danger} onPress={() => {
+                            console.warn('clicked');
+                        }} />
                         <CardViewWithImage cardName={'Plan Dues Today'} width={180} height={120} number={25} colorTxt={Colors.buttonColorPrimary} />
 
                         {/* <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/searchIcon.png')} />
@@ -60,7 +62,9 @@ const MainDash = () => {
 
                     </ScrollView>
                     <View style={styles.smallCards}>
-                        <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/members.png')} />
+                        <CardViewWithImage cardName={'All members'} width={180} height={120} imgSource={require('../../assets/icons/members.png')} onPress={() => {
+                            navigation.navigate('Members');
+                        }} />
                         <CardViewWithImage cardName={'Active'} width={180} height={120} imgSource={require('../../assets/icons/active.png')} />
 
                     </View>
