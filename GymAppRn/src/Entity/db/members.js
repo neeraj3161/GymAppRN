@@ -43,10 +43,34 @@ const insertGymMember = (props) => {
     });
 };
 
+const updateGymMember = (props, phoneNumberChanged) => {
+    console.log(JSON.stringify(props.name));
+    return new Promise((resolve, reject) => {
+        let sql = `UPDATE members SET email = '${props.email}',name = '${props.name}', surname =  '${props.surname}', date_of_birth =  '${props.dob}', age =  ${props.age}, medical_history =  '${props.medical_record}', modifier =  0`
+
+        if (phoneNumberChanged) {
+            sql = sql.concat(` ,phone_number =  '${props.phno}'`)
+        }
+
+        sql = sql.concat(` WHERE member_id = ${props.member_id};`)
+
+        db.executeSql(sql, [],
+            result => {
+                console.log(`Member ${props.name} data updated successfully!!`);
+                resolve(1);
+            },
+            error => {
+                console.log(`Error occurred ${JSON.stringify(error)}`);
+                reject(`update error ${error}`);
+            }
+        );
+    });
+};
+
 
 const LoadMemberInfo = (member_id) => {
 
-    let sql = `SELECT name, surname,phone_number, email, age, date_of_birth,medical_history, added_by, registered_on, is_active FROM members WHERE member_id = ${member_id} LIMIT 1;`;
+    let sql = `SELECT member_id, name, surname,phone_number, email, age, date_of_birth,medical_history, added_by, registered_on, is_active FROM members WHERE member_id = ${member_id};`;
     return new Promise((resolve, reject) => {
 
         const memberObject = new Object();
@@ -126,5 +150,5 @@ const changeMemberState = (member_id, state) => {
     )
 }
 
-export { insertGymMember, LoadAllMembers, LoadMemberInfo }
+export { insertGymMember, LoadAllMembers, LoadMemberInfo, updateGymMember }
 

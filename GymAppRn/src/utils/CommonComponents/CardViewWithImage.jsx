@@ -13,7 +13,7 @@ const CardViewWithImage = ({ cardName, number, width, height, imgSource, colorTx
   return (
     <TouchableOpacity delayPressIn={1000} onPress={onPress}>
       <LinearGradient
-        colors={['#FFFDFA', '#FFFDFA']} style={[importedStyles, styles.mainContainer]}>
+        colors={[Colors.shinyWhite, Colors.shinyWhite]} style={[importedStyles, styles.mainContainer]}>
         {number && <Text style={[styles.cardTxt, { color: colorTxt }]}>{number}</Text>}
         {imgSource &&
           <Image source={imgSource} style={{ width: 25, height: 25, tintColor: Colors.buttonColorPrimary, marginBottom: 15 }} />
@@ -47,5 +47,5 @@ const styles = StyleSheet.create({
 
   cardTxt: { fontSize: 23, fontWeight: '600', marginBottom: 15 },
 
-  cardInfo: { fontSize: 14, color: '#151515' }
+  cardInfo: { fontSize: 14, color: Colors.shinyBlack }
 });

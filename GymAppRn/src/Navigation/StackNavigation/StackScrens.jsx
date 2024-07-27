@@ -8,6 +8,7 @@ import Login from '../../Screens/Login/Login';
 import AddMember from '../../Screens/Members/AddMember';
 import MemberDetailsPage from '../../Screens/Members/MemberDetailsPage';
 import PlanHistoryPage from '../../Screens/Plans/PlanHistoryPage';
+import AddPlan from '../../Screens/Plans/AddPlan';
 
 const StackScrens = () => {
   const Stack = createNativeStackNavigator();
@@ -28,6 +29,11 @@ const StackScrens = () => {
         options={{ headerShown: false }}
         name="AddMember"
         component={AddMember} />
+
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="AddPlan"
+        component={AddPlan} />
 
       <Stack.Screen
         options={{ headerShown: false }}

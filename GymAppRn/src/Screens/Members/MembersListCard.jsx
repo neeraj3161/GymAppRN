@@ -13,12 +13,12 @@ const MembersListCard = (props) => {
                 <View style={styles.content}>
                     <Text style={styles.headTxt}>Mem Id</Text>
 
-                    <Text>{props.memberId}</Text>
+                    <Text style={styles.txtData}>{props.memberId}</Text>
                 </View>
                 <View style={styles.content}>
                     <Text style={styles.headTxt}>Name</Text>
 
-                    <Text>{props.name}</Text>
+                    <Text style={styles.txtData}>{props.name}</Text>
 
                 </View>
                 <View style={styles.content}>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.shinyWhite,
         borderRadius: 10,
         height: 80,
         marginVertical: 10,
@@ -51,7 +51,9 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingLeft: 20,
         paddingRight: 20,
-        alignItems: 'center'
+        alignItems: 'center',
+        color: Colors.shinyBlack
+
     },
 
     status: {
@@ -63,11 +65,18 @@ const styles = StyleSheet.create({
 
     headTxt: {
         fontWeight: 'bold',
-        marginBottom: 5
+        marginBottom: 5,
+        color: Colors.buttonColorPrimary
     },
 
 
     content: {
         justifyContent: 'space-between',
+        color: Colors.shinyBlack
+
     },
+    txtData: {
+        color: Colors.buttonColorPrimary
+
+    }
 })

@@ -1,8 +1,8 @@
 import { Image, StyleSheet, Switch, Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import TopNavBar from '../SharedComponents/TopNavBar'
 import Colors from '../../utils/Colors'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'
 import { LoadMemberInfo } from '../../Entity/db/members'
 
 const MemberDetailsPage = () => {
@@ -20,7 +20,8 @@ const MemberDetailsPage = () => {
     const [dob, setDob] = useState('');
     const [state, setState] = useState();
 
-    useEffect(() => {
+
+    const loadMembers = useCallback(() => {
         LoadMemberInfo(memberId).then((result) => {
             console.log(JSON.stringify(result));
             setMemberId(memberId);
@@ -32,7 +33,15 @@ const MemberDetailsPage = () => {
             setMedicalRecord(result.medical_history);
             setDob(result.dob);
         })
-    }, [])
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            loadMembers();
+        }, [loadMembers])
+    );
+
+
     return (
         <View style={styles.mainContainer}>
             <TopNavBar tabHeading={"Members Info"} />
@@ -74,9 +83,14 @@ const MemberDetailsPage = () => {
                     </View>
 
                 </View>
-                <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>Edit member info</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => { navigation.navigate("AddPlan") }} style={styles.viewPlanBtn}><Text style={styles.labelTxt}>Add new plan</Text></TouchableOpacity>
+
+                {/* TODO:: If plan exists then only show below 2 options */}
                 <TouchableOpacity style={styles.viewPlanBtn}><Text style={styles.labelTxt}>Current plan details</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => { navigation.navigate("ViewPlanHistory") }} style={styles.viewPlanBtn}><Text style={styles.labelTxt}>View plan history</Text></TouchableOpacity>
+
+
+                <TouchableOpacity onPress={() => { navigation.navigate("AddMember", ['Edit member data', member_id]) }} style={styles.viewPlanBtn}><Text style={styles.labelTxt}>Edit member info</Text></TouchableOpacity>
 
                 {/* To cover bottom nav bar height */}
                 <View style={{ height: 100 }}></View>

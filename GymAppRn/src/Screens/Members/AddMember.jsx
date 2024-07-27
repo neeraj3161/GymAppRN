@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native'
-import { React, useState } from 'react'
+import { React, useEffect, useReducer, useState } from 'react'
 import TopNavBar from '../SharedComponents/TopNavBar'
 import Colors from '../../utils/Colors'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { insertGymMember } from '../../Entity/db/members';
+import { insertGymMember, LoadMemberInfo, updateGymMember } from '../../Entity/db/members';
+import { useRoute } from '@react-navigation/native';
 
 
 
@@ -16,6 +17,9 @@ const AddMember = () => {
     const [dob, setDOB] = useState('');
     const [age, setAge] = useState('');
     const [medicalRecord, setMedicalRecord] = useState('');
+    const [oldPhno, setOldPhno] = useState('');
+    const [memId, setMemId] = useState('');
+
 
     const today = new Date();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -25,6 +29,10 @@ const AddMember = () => {
         //TODO :: ADD more inputs
         setEmail('');
 
+    }
+
+    const updateMemberObjModel = (email, name, surname, phno, medical_history, age, dob, member_id) => {
+        return { email: email, name: name, surname: surname, phno: phno, medical_record: medical_history, age: age, dob: dob, member_id: member_id }
     }
 
     const insertMember = () => {
@@ -65,12 +73,37 @@ const AddMember = () => {
         hideDatePicker();
     };
 
+    const route = useRoute();
+    console.log(JSON.stringify(route.params));
+    const pageHeading = route.params[0];
+    const mem_id = route.params[1];
+    console.log(pageHeading);
+    useEffect(() => {
+        if (pageHeading === 'Edit member data') {
+            console.log(mem_id);
+            LoadMemberInfo(mem_id).then((result) => {
+                console.log(JSON.stringify(result));
+                setEmail(result.email);
+                setName(result.name.split(' ')[0]);
+                setSurname(result.name.split(' ')[1]);
+                setPhone(result.phno);
+                setOldPhno(result.phno);
+                setAge(result.age.toString());
+                setDOB(result.dob.toString());
+                setSelected(result.dob.toString());
+                setMedicalRecord(result.medical_history);
+                setMemId(result.member_id);
 
+            }).catch((error) => {
+                console.log(JSON.stringify(error));
 
+            });
+        }
+    }, [])
 
     return (
         <View style={styles.mainContainer}>
-            <TopNavBar tabHeading={'Add new member'} />
+            <TopNavBar tabHeading={pageHeading} />
 
             <ScrollView>
 
@@ -147,19 +180,34 @@ const AddMember = () => {
                             if (!validateUserInput()) {
                                 Alert.alert('Inavlid data', 'Please correct the form data and try again!!', [{ text: 'ok', onPress: () => { } }]);
                             } else {
-                                insertMember().then(result => {
-                                    if (result === -1) {
-                                        Alert.alert('Member Already Exists', 'Show member data', [{ text: 'ok', onPress: () => { } }]);
-                                    } else {
-                                        Alert.alert('Member Added Successfully', 'Show member data', [{ text: 'ok', onPress: () => { } }]);
-                                    }
-                                })
-                                    .catch(error => {
-                                        Alert.alert('Error occured', `Error occured while inserting member: ${error}`, [{ text: 'ok', onPress: () => { } }]);
-                                    });
+                                if (pageHeading === 'Edit member data') {
+                                    let updateMemberModel = updateMemberObjModel(email, name, surname, phone, medicalRecord, age, dob, memId);
+                                    let phoneNumberChanged = (oldPhno !== phone) ? true : false;
+                                    updateGymMember(updateMemberModel, phoneNumberChanged).then((result) => {
+                                        if (result === 1) {
+                                            Alert.alert('Member Updated Successfully', 'Show member data', [{ text: 'ok', onPress: () => { } }]);
+
+                                        }
+                                    }).catch((error) => {
+                                        Alert.alert('Error occurred while updating', `${error}`, [{ text: 'ok', onPress: () => { } }]);
+
+                                    })
+                                }
+                                else {
+                                    insertMember().then(result => {
+                                        if (result === -1) {
+                                            Alert.alert('Member Already Exists', 'Show member data', [{ text: 'ok', onPress: () => { } }]);
+                                        } else {
+                                            Alert.alert('Member Added Successfully', 'Show member data', [{ text: 'ok', onPress: () => { } }]);
+                                        }
+                                    })
+                                        .catch(error => {
+                                            Alert.alert('Error occured', `Error occured while inserting member: ${error}`, [{ text: 'ok', onPress: () => { } }]);
+                                        });
+                                }
                             }
 
-                        }} style={styles.submitBtn}><Text style={styles.submitBtnTxt}>Submit</Text></TouchableOpacity>
+                        }} style={styles.submitBtn}><Text style={styles.submitBtnTxt}>{pageHeading === 'Add new member' ? 'Submit' : 'Update'}</Text></TouchableOpacity>
                     </View>
                 </View>
                 {/* To cover bottom nav bar height */}

@@ -42,7 +42,7 @@ const MainDash = () => {
             </View>
 
             <View style={styles.bottomContainer}>
-                <TouchableOpacity style={styles.addBtn} onPress={() => { navigation.navigate("AddMember") }}>
+                <TouchableOpacity style={styles.addBtn} onPress={() => { navigation.navigate("AddMember", ["Add new member"]) }}>
                     <View >
                         <Image source={require('../../assets/icons/add.png')} style={{ width: 25, height: 25, }} />
                     </View>
